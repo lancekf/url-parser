@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>URL Parser</title>
+  <script>
+
+  	function load() {
+    	document.getElementById("url").addEventListener("input", parse)
+    	document.getElementById("clear").addEventListener("click", clear)
+        loadFromLocation()
+  	}
+
+    function parse(e) {
+      document.getElementById("output").innerHTML = ""
+      parseUrl("root", e.target.value)
+    }
+
+    function clear(e) {
+      document.getElementById("url").value = ""
+    }
+
+    function loadFromLocation() {
+      var urlInput = document.getElementById("url")
+      urlInput.value = window.location
+      urlInput.dispatchEvent(new Event('input'))
+    }
+
+    function parseUrl(label, url) {
+      try {
+        var asUrl = new URL(url)
+        addUrl(label, url)
+        if (asUrl.searchParams) {
+          for (const [key, value] of asUrl.searchParams) {
+            parseUrl(`${label}.${key}`, value)
+          }
+        } else {
+          // no query params
+        }
+      } catch (error) {
+        // not a url
+      }
+    }
+
+    function addUrl(key, value) {
+      var output = document.getElementById("output")
+      output.insertAdjacentHTML("afterbegin", `<tr><td>${key}</td><td><a href="${value}">${value}</a></td></tr>`)
+    }
+
+  </script>
+</head>
+<body onload="load()">
+  <textarea id="url" style="width: 449px; height: 101px;" placeholder="enter url..."></textarea>
+  <button id="clear">clear</button>
+  <p>Found URLs:</p>
+  <table id="output-table">
+    <thead>
+      <th>param</th>
+      <th>value</th>
+    </thead>
+    <tbody id="output">
+    </tbody>
+  </table>
+</body>
+</html>
