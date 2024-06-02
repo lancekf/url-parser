@@ -43,7 +43,9 @@
 
     function addUrl(key, value) {
       var output = document.getElementById("output")
-      output.insertAdjacentHTML("afterbegin", `<tr><td>${key}</td><td><a href="${value}">${value}</a></td></tr>`)
+      var url = new URL(value)
+      var base = url.origin + url.pathname
+      output.insertAdjacentHTML("afterbegin", `<tr><td>${key}</td><td><a href="${base}">${base}</a></td><td><a href="${value}">${value}</a></td></tr>`)
     }
 
   </script>
@@ -55,7 +57,8 @@
   <table id="output-table">
     <thead>
       <th>param</th>
-      <th>value</th>
+      <th>Base</th>
+      <th>Full</th>
     </thead>
     <tbody id="output">
     </tbody>
